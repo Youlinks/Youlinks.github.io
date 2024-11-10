@@ -263,39 +263,57 @@
 </ul>
 </section>
 
+<button id="toggle-theme" onclick="toggleTheme()">🌓</button>
+  
 <!-- Botón para abrir el formulario -->
-<button class="toggle-form-btn" onclick="toggleForm()">
+<div class="toggle-form-btn" onclick="toggleForm()">
   <i class="fas fa-arrow-right"></i>
-</button>
+</div>
 
 <!-- Formulario deslizante -->
 <div id="formulario">
-  <iframe src="https://formularios.vanillaskies.net"></iframe>
+  <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSceC13g3AqDNA21OS1FW0RZoEHD8Wf8ARzEZPKVp1BGxZ91Eg/viewform?embedded=true" width="640" height="965">Cargando...</iframe>
 </div>
 
 <script>
-  // Filtrado de enlaces
+  function toggleForm() {
+    const form = document.getElementById('formulario');
+    form.classList.toggle('open'); // Si está cerrado, lo abre, si está abierto lo cierra
+  }
+
   function filterLinks() {
-    let searchQuery = document.getElementById("search-bar").value.toLowerCase();
-    let selectedCategory = document.getElementById("category-filter").value;
-    let enlaces = document.querySelectorAll("#enlaces-list li");
-
-    enlaces.forEach(function(enlace) {
-      let title = enlace.querySelector("h3 a").textContent.toLowerCase();
-      let category = enlace.classList[0];
-
-      if (title.includes(searchQuery) && (selectedCategory === "" || category === selectedCategory)) {
-        enlace.style.display = "block";
+    const searchQuery = document.getElementById('search-bar').value.toLowerCase();
+    const category = document.getElementById('category-filter').value;
+    const links = document.querySelectorAll('#enlaces-list li');
+    
+    links.forEach(link => {
+      const title = link.querySelector('h3').textContent.toLowerCase();
+      const description = link.querySelector('p').textContent.toLowerCase();
+      const categoryMatches = category ? link.classList.contains(category) : true;
+      const searchMatches = title.includes(searchQuery) || description.includes(searchQuery);
+      
+      if (categoryMatches && searchMatches) {
+        link.style.display = '';
       } else {
-        enlace.style.display = "none";
+        link.style.display = 'none';
       }
     });
   }
-
-  // Abrir y cerrar el formulario deslizante
-  function toggleForm() {
-    document.getElementById("formulario").classList.toggle("open");
-  }
 </script>
+
+
+<!-- Botón de volver al inicio -->
+<button id="back-to-top" onclick="scrollToTop()">⬆️</button>
+
+  
+<!-- Botones de compartir -->
+<div class="share-buttons">
+  <a href="https://wa.me/?text=¡Visita esta página de enlaces interesantes!" target="_blank">WhatsApp</a>
+  <a href="https://www.facebook.com/sharer/sharer.php?u=https://tulogica.github.io" target="_blank">Facebook</a>
+  <a href="https://t.me/share/url?url=https://tulogica.github.io&text=¡Visita esta página de enlaces interesantes!" target="_blank">Telegram</a>
+  <a href="https://www.instagram.com/?url=https://tulogica.github.io" target="_blank">Instagram</a>
+  <a href="mailto:?subject=¡Mira esta página de enlaces!&body=¡Revisa este sitio de enlaces interesantes! https://tulogica.github.io" target="_blank">Gmail</a>
+</div>
+
 </body>
 </html>
