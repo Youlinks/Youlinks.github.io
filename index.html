@@ -209,57 +209,7 @@
 <!-- Enlaces Destacados -->
 <section class="enlaces-section">
  <ul id="enlaces-list">
-  <!-- Enlaces existentes -->
-  <li class="juegos">
-    <h3><a href="https://tulogica.github.io" target="_blank">Inscripciones Guerras de Clanes</a></h3>
-    <p>Un portal donde puedes registrarte para participar en guerras de clanes. ¡Prepárate para la batalla!</p>
-  </li>
-  <li class="educacion">
-    <h3><a href="https://pylarphylaxin.github.io" target="_blank">Análisis de URL</a></h3>
-    <p>Una herramienta útil para analizar URLs y verificar su seguridad y contenido.</p>
-  </li>
-
-  <!-- Espacio para 10 enlaces adicionales -->
-  <li class="juegos">
-    <h3><a href="https://link1.com" target="_blank">Enlace 1</a></h3>
-    <p>Descripción del enlace 1.</p>
-  </li>
-  <li class="educacion">
-    <h3><a href="https://link2.com" target="_blank">Enlace 2</a></h3>
-    <p>Descripción del enlace 2.</p>
-  </li>
-  <li class="herramientas">
-    <h3><a href="https://link3.com" target="_blank">Enlace 3</a></h3>
-    <p>Descripción del enlace 3.</p>
-  </li>
-  <li class="juegos">
-    <h3><a href="https://link4.com" target="_blank">Enlace 4</a></h3>
-    <p>Descripción del enlace 4.</p>
-  </li>
-  <li class="educacion">
-    <h3><a href="https://link5.com" target="_blank">Enlace 5</a></h3>
-    <p>Descripción del enlace 5.</p>
-  </li>
-  <li class="herramientas">
-    <h3><a href="https://link6.com" target="_blank">Enlace 6</a></h3>
-    <p>Descripción del enlace 6.</p>
-  </li>
-  <li class="juegos">
-    <h3><a href="https://link7.com" target="_blank">Enlace 7</a></h3>
-    <p>Descripción del enlace 7.</p>
-  </li>
-  <li class="educacion">
-    <h3><a href="https://link8.com" target="_blank">Enlace 8</a></h3>
-    <p>Descripción del enlace 8.</p>
-  </li>
-  <li class="herramientas">
-    <h3><a href="https://link9.com" target="_blank">Enlace 9</a></h3>
-    <p>Descripción del enlace 9.</p>
-  </li>
-  <li class="juegos">
-    <h3><a href="https://link10.com" target="_blank">Enlace 10</a></h3>
-    <p>Descripción del enlace 10.</p>
-  </li>
+  <!-- Los enlaces se insertarán aquí mediante JavaScript -->
 </ul>
 </section>
 
@@ -276,44 +226,67 @@
 </div>
 
 <script>
-  function toggleForm() {
-    const form = document.getElementById('formulario');
-    form.classList.toggle('open'); // Si está cerrado, lo abre, si está abierto lo cierra
+  // Función para obtener los enlaces desde Google Apps Script y agregarlos a la página
+  function loadLinks() {
+    var url = 'https://script.google.com/macros/s/AKfycbz7PxlqKKze5PAb4aqh0-a2UCtlJTN5vXs24lKzqYyxX2u_CysbIhpzlBRBtq1kkdR4/exec'; // Aquí pones tu URL
+    fetch(url)
+      .then(response => response.json())  // Convierte la respuesta a JSON
+      .then(data => {
+        var enlacesList = document.getElementById("enlaces-list");
+        enlacesList.innerHTML = ''; // Limpiar enlaces existentes
+        data.forEach(function(enlace) {
+          var enlaceDiv = document.createElement("li");
+          enlaceDiv.classList.add(enlace.categoria);  // Aquí puedes incluir una clase según la categoría si la tienes
+
+          enlaceDiv.innerHTML = `
+            <h3>${enlace.titulo}</h3>
+            <p>${enlace.descripcion}</p>
+            <a href="${enlace.url}" target="_blank">Ver Enlace</a>
+          `;
+          enlacesList.appendChild(enlaceDiv);
+        });
+      })
+      .catch(error => console.error('Error al cargar los enlaces:', error));
   }
 
+  // Llama a la función para cargar los enlaces cuando la página se haya cargado
+  window.onload = function() {
+    loadLinks();
+  };
+  
+  // Filtrar los enlaces
   function filterLinks() {
-    const searchQuery = document.getElementById('search-bar').value.toLowerCase();
-    const category = document.getElementById('category-filter').value;
-    const links = document.querySelectorAll('#enlaces-list li');
-    
-    links.forEach(link => {
-      const title = link.querySelector('h3').textContent.toLowerCase();
-      const description = link.querySelector('p').textContent.toLowerCase();
-      const categoryMatches = category ? link.classList.contains(category) : true;
-      const searchMatches = title.includes(searchQuery) || description.includes(searchQuery);
+    let searchQuery = document.getElementById("search-bar").value.toLowerCase();
+    let category = document.getElementById("category-filter").value;
+
+    let enlaces = document.querySelectorAll(".enlaces-section li");
+
+    enlaces.forEach(function(enlace) {
+      let title = enlace.querySelector("h3").textContent.toLowerCase();
+      let description = enlace.querySelector("p").textContent.toLowerCase();
+      let matchesSearch = title.includes(searchQuery) || description.includes(searchQuery);
+      let matchesCategory = category ? enlace.classList.contains(category) : true;
       
-      if (categoryMatches && searchMatches) {
-        link.style.display = '';
+      if (matchesSearch && matchesCategory) {
+        enlace.style.display = "block";
       } else {
-        link.style.display = 'none';
+        enlace.style.display = "none";
       }
     });
   }
+
+  // Alternar entre temas claro y oscuro
+  function toggleTheme() {
+    var body = document.body;
+    body.classList.toggle('dark-theme');
+  }
+
+  // Abrir/ cerrar el formulario deslizante
+  function toggleForm() {
+    var form = document.getElementById('formulario');
+    form.classList.toggle('open');
+  }
 </script>
-
-
-<!-- Botón de volver al inicio -->
-<button id="back-to-top" onclick="scrollToTop()">⬆️</button>
-
-  
-<!-- Botones de compartir -->
-<div class="share-buttons">
-  <a href="https://wa.me/?text=¡Visita esta página de enlaces interesantes!" target="_blank">WhatsApp</a>
-  <a href="https://www.facebook.com/sharer/sharer.php?u=https://tulogica.github.io" target="_blank">Facebook</a>
-  <a href="https://t.me/share/url?url=https://tulogica.github.io&text=¡Visita esta página de enlaces interesantes!" target="_blank">Telegram</a>
-  <a href="https://www.instagram.com/?url=https://tulogica.github.io" target="_blank">Instagram</a>
-  <a href="mailto:?subject=¡Mira esta página de enlaces!&body=¡Revisa este sitio de enlaces interesantes! https://tulogica.github.io" target="_blank">Gmail</a>
-</div>
 
 </body>
 </html>
